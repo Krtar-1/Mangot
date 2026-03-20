@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Books - Mangot</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Mangot</a>
+            <div class="nav-links" id="nav-links">
+                <!-- Dynamic nav links will be inserted here -->
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="search-container">
+            <div class="search-header">
+                <h1>Search Books</h1>
+                <p class="search-description">Discover books from collections across Mangot</p>
+            </div>
+
+            <div class="search-controls">
+                <div class="search-input-wrapper">
+                    <input type="text" id="search-input" placeholder="Search by title, author, or series..." autocomplete="off">
+                    <button id="clear-search" class="clear-btn" title="Clear search">&times;</button>
+                </div>
+
+                <div class="filter-sort-row">
+                    <div class="filter-group">
+                        <label for="sort-by">Sort by:</label>
+                        <select id="sort-by">
+                            <option value="title-asc">Title (A-Z)</option>
+                            <option value="title-desc">Title (Z-A)</option>
+                            <option value="author-asc">Author (A-Z)</option>
+                            <option value="author-desc">Author (Z-A)</option>
+                            <option value="date-desc" selected>Date Added (Newest)</option>
+                            <option value="date-asc">Date Added (Oldest)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="search-stats" class="search-stats"></div>
+
+            <div id="search-results" class="collection-grid">
+                <!-- Results will be rendered here -->
+            </div>
+
+            <div id="no-results" class="empty-state">
+                <p>No books found</p>
+                <span class="empty-hint">Try a different search term</span>
+            </div>
+
+            <div id="initial-state" class="empty-state">
+                <p>Start searching</p>
+                <span class="empty-hint">Enter a title, author, or series name above</span>
+            </div>
+
+            <div id="loading-state" class="loading-state">
+                <p>Searching...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Comments Modal -->
+    <div id="comments-modal" class="modal">
+        <div class="modal-content comments-modal-content">
+            <div class="modal-header">
+                <h2>Comments</h2>
+                <button class="modal-close" id="comments-close">&times;</button>
+            </div>
+            <p class="comments-book-title" id="comments-book-title"></p>
+
+            <div id="comments-list" class="comments-list">
+                <!-- Comments will be rendered here -->
+            </div>
+
+            <form id="comment-form" class="comment-form">
+                <textarea id="comment-text" placeholder="Write a comment..." required maxlength="500"></textarea>
+                <div class="comment-form-footer">
+                    <label class="spoiler-label">
+                        <input type="checkbox" id="spoiler-toggle">
+                        <span class="spoiler-checkbox"></span>
+                        Mark as spoiler
+                    </label>
+                    <button type="submit" class="cta submit-btn" id="submit-comment">Post Comment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Mangot</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/comments.js"></script>
+    <script src="js/search.js"></script>
+</body>
+</html>

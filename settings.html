@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Mangot</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Mangot</a>
+            <div class="nav-links">
+                <a href="search.html" class="nav-link">Search</a>
+                <a href="collection.html" class="nav-link">My Collection</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="settings-container">
+            <div class="settings-header">
+                <a href="profile.html" class="back-link">&larr; Back to Profile</a>
+                <h1>Settings</h1>
+            </div>
+
+            <form id="settings-form" class="book-form">
+                <div class="form-group">
+                    <label for="username">Username <span class="required">*</span></label>
+                    <input type="text" id="username" name="username" required placeholder="Enter username" minlength="3" maxlength="20">
+                    <span class="field-hint">3-20 characters, used for comments and profile</span>
+                </div>
+
+                <div class="form-group photo-upload">
+                    <label>Profile Picture</label>
+                    <div class="profile-photo-preview" id="profile-photo-preview">
+                        <div class="photo-placeholder" id="photo-placeholder">
+                            <span id="avatar-initial">?</span>
+                        </div>
+                        <img id="preview-image" src="" alt="Profile picture">
+                        <div class="photo-overlay">Click to change</div>
+                    </div>
+                    <input type="file" id="profile-photo" name="photo" accept="image/*">
+                    <button type="button" class="remove-photo-btn" id="remove-photo" style="display: none;">Remove Photo</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" name="bio" placeholder="Tell us about yourself..." maxlength="200" rows="3"></textarea>
+                    <span class="char-count"><span id="bio-count">0</span>/200</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="favorite-genre">Favorite Genre</label>
+                    <select id="favorite-genre" name="favoriteGenre">
+                        <option value="">Select a genre</option>
+                        <option value="Myth">Myth</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Novel">Novel</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Biography">Biography</option>
+                        <option value="Fairy Tale">Fairy Tale</option>
+                        <option value="Drama">Drama</option>
+                        <option value="History">History</option>
+                        <option value="Western">Western</option>
+                        <option value="Poems">Poems</option>
+                        <option value="Non-Fiction">Non-Fiction</option>
+                        <option value="Manga">Manga</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Children">Children</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="cta submit-btn" id="save-btn">Save Changes</button>
+                </div>
+
+                <div id="success-message" class="success-message" style="display: none;">
+                    Settings saved successfully!
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Mangot</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script src="js/settings.js"></script>
+    <script>
+        requireAuth();
+    </script>
+</body>
+</html>

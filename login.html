@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Mangot</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Mangot</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="form-container">
+            <h1 id="auth-title">Sign In</h1>
+            <p class="form-description" id="auth-description">Welcome back to your collection</p>
+
+            <div id="error-message" class="error-message"></div>
+
+            <form id="auth-form" class="book-form">
+                <div class="form-group" id="username-group" style="display: none;">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Choose a username" minlength="3" maxlength="20">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="password" name="password" required placeholder="Enter your password" minlength="6">
+                        <button type="button" class="toggle-password" id="toggle-password" title="Show password">
+                            <span class="eye-icon">&#128065;</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group" id="confirm-password-group" style="display: none;">
+                    <label for="confirm-password">Confirm Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" minlength="6">
+                        <button type="button" class="toggle-password" id="toggle-confirm-password" title="Show password">
+                            <span class="eye-icon">&#128065;</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="cta submit-btn" id="submit-btn">Sign In</button>
+            </form>
+
+            <p class="auth-toggle">
+                <span id="toggle-text">Don't have an account?</span>
+                <a href="#" id="toggle-link">Sign Up</a>
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Mangot</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Redirect if already logged in
+            redirectIfLoggedIn();
+
+            const authForm = document.getElementById('auth-form');
+            const authTitle = document.getElementById('auth-title');
+            const authDescription = document.getElementById('auth-description');
+            const submitBtn = document.getElementById('submit-btn');
+            const toggleText = document.getElementById('toggle-text');
+            const toggleLink = document.getElementById('toggle-link');
+            const errorMessage = document.getElementById('error-message');
+            const usernameGroup = document.getElementById('username-group');
+            const usernameInput = document.getElementById('username');
+            const confirmPasswordGroup = document.getElementById('confirm-password-group');
+            const confirmPasswordInput = document.getElementById('confirm-password');
+            const passwordInput = document.getElementById('password');
+            const togglePasswordBtn = document.getElementById('toggle-password');
+            const toggleConfirmPasswordBtn = document.getElementById('toggle-confirm-password');
+
+            let isSignUp = false;
+
+            // Password visibility toggle
+            togglePasswordBtn.addEventListener('click', function() {
+                togglePasswordVisibility(passwordInput, this);
+            });
+
+            toggleConfirmPasswordBtn.addEventListener('click', function() {
+                togglePasswordVisibility(confirmPasswordInput, this);
+            });
+
+            function togglePasswordVisibility(input, button) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    button.title = 'Hide password';
+                    button.querySelector('.eye-icon').textContent = '\u{1F441}\u{FE0F}\u{200D}\u{1F5E8}\u{FE0F}';
+                } else {
+                    input.type = 'password';
+                    button.title = 'Show password';
+                    button.querySelector('.eye-icon').textContent = '\u{1F441}';
+                }
+            }
+
+            // Toggle between sign in and sign up
+            toggleLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                isSignUp = !isSignUp;
+                updateFormMode();
+            });
+
+            function updateFormMode() {
+                if (isSignUp) {
+                    authTitle.textContent = 'Sign Up';
+                    authDescription.textContent = 'Create your account to start collecting';
+                    submitBtn.textContent = 'Sign Up';
+                    toggleText.textContent = 'Already have an account?';
+                    toggleLink.textContent = 'Sign In';
+                    usernameGroup.style.display = 'flex';
+                    usernameInput.required = true;
+                    confirmPasswordGroup.style.display = 'flex';
+                    confirmPasswordInput.required = true;
+                } else {
+                    authTitle.textContent = 'Sign In';
+                    authDescription.textContent = 'Welcome back to your collection';
+                    submitBtn.textContent = 'Sign In';
+                    toggleText.textContent = "Don't have an account?";
+                    toggleLink.textContent = 'Sign Up';
+                    usernameGroup.style.display = 'none';
+                    usernameInput.required = false;
+                    confirmPasswordGroup.style.display = 'none';
+                    confirmPasswordInput.required = false;
+                }
+                errorMessage.style.display = 'none';
+            }
+
+            // Handle form submission
+            authForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const username = usernameInput.value.trim();
+
+                // Validate username for sign up
+                if (isSignUp && username.length < 3) {
+                    errorMessage.textContent = 'Username must be at least 3 characters.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+
+                // Validate passwords match for sign up
+                if (isSignUp && password !== confirmPasswordInput.value) {
+                    errorMessage.textContent = 'Passwords do not match.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+
+                errorMessage.style.display = 'none';
+                submitBtn.disabled = true;
+                submitBtn.textContent = isSignUp ? 'Creating account...' : 'Signing in...';
+
+                try {
+                    if (isSignUp) {
+                        // Check if username is already taken
+                        const usernameDoc = await db.collection('usernames').doc(username.toLowerCase()).get();
+                        if (usernameDoc.exists) {
+                            throw { code: 'auth/username-taken' };
+                        }
+
+                        // Create the user
+                        const userCredential = await signUp(email, password);
+                        const userId = userCredential.user.uid;
+
+                        // Save username to user document
+                        await db.collection('users').doc(userId).set({
+                            username: username,
+                            email: email,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }, { merge: true });
+
+                        // Reserve the username
+                        await db.collection('usernames').doc(username.toLowerCase()).set({
+                            userId: userId
+                        });
+                    } else {
+                        await signIn(email, password);
+                    }
+                    window.location.href = 'collection.html';
+                } catch (error) {
+                    errorMessage.textContent = getErrorMessage(error.code);
+                    errorMessage.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = isSignUp ? 'Sign Up' : 'Sign In';
+                }
+            });
+
+            function getErrorMessage(errorCode) {
+                switch (errorCode) {
+                    case 'auth/email-already-in-use':
+                        return 'This email is already registered. Try signing in.';
+                    case 'auth/invalid-email':
+                        return 'Please enter a valid email address.';
+                    case 'auth/weak-password':
+                        return 'Password should be at least 6 characters.';
+                    case 'auth/user-not-found':
+                        return 'No account found with this email.';
+                    case 'auth/wrong-password':
+                        return 'Incorrect password. Please try again.';
+                    case 'auth/invalid-credential':
+                        return 'Invalid email or password.';
+                    case 'auth/username-taken':
+                        return 'This username is already taken. Choose another.';
+                    default:
+                        return 'An error occurred. Please try again.';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

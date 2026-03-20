@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Mangot</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Mangot</a>
+            <div class="nav-links">
+                <a href="search.html" class="nav-link">Search</a>
+                <a href="collection.html" class="nav-link">My Collection</a>
+                <a href="profile.html" class="nav-link active">Profile</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar" id="profile-avatar">
+                    <span id="avatar-initial">?</span>
+                    <img id="profile-photo" src="" alt="Profile photo" style="display: none;">
+                </div>
+                <h1 id="profile-username">Loading...</h1>
+                <p id="profile-bio" class="profile-bio"></p>
+                <span id="profile-favorite-genre" class="favorite-genre-badge" style="display: none;"></span>
+            </div>
+
+            <div class="profile-card">
+                <div class="card-header-with-action">
+                    <h2>Account Information</h2>
+                    <a href="settings.html" class="settings-link">Edit Profile</a>
+                </div>
+                <div class="profile-info">
+                    <div class="info-row">
+                        <span class="info-label">Username</span>
+                        <span class="info-value" id="info-username">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email</span>
+                        <span class="info-value" id="info-email">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Member Since</span>
+                        <span class="info-value" id="info-member-since">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <h2>Collection Stats</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-total-books">0</span>
+                        <span class="stat-label">Total Books</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-read-books">0</span>
+                        <span class="stat-label">Read</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-unread-books">0</span>
+                        <span class="stat-label">Unread</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-series">0</span>
+                        <span class="stat-label">Series</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <button class="cta sign-out-cta" id="sign-out-btn">Sign Out</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Mangot</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script src="js/profile.js"></script>
+    <script>
+        // Protect this route
+        requireAuth();
+    </script>
+</body>
+</html>

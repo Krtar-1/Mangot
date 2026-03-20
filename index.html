@@ -10,6 +10,9 @@
     <header>
         <nav>
             <div class="logo">Mangot</div>
+            <div class="nav-links" id="nav-links">
+                <!-- Dynamic nav links will be inserted here -->
+            </div>
         </nav>
     </header>
 
@@ -21,12 +24,48 @@
                 Keep track of every book you own. Build your collection,
                 never lose track of what you've got.
             </p>
-            <button class="cta">Get Started</button>
+            <a href="login.html" class="cta" id="cta-btn">Get Started</a>
         </section>
     </main>
 
     <footer>
         <p>&copy; 2026 Mangot</p>
     </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.getElementById('nav-links');
+            const ctaBtn = document.getElementById('cta-btn');
+
+            onAuthStateChange((user) => {
+                if (user) {
+                    // User is signed in
+                    navLinks.innerHTML = `
+                        <a href="search.html" class="nav-link">Search</a>
+                        <a href="collection.html" class="nav-link">My Collection</a>
+                        <a href="profile.html" class="nav-link">Profile</a>
+                    `;
+                    ctaBtn.href = 'collection.html';
+                    ctaBtn.textContent = 'Go to Collection';
+                } else {
+                    // User is signed out
+                    navLinks.innerHTML = `
+                        <a href="search.html" class="nav-link">Search</a>
+                        <a href="login.html" class="nav-link">Sign In</a>
+                    `;
+                    ctaBtn.href = 'login.html';
+                    ctaBtn.textContent = 'Get Started';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
