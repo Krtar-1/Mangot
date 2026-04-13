@@ -14,13 +14,36 @@ document.addEventListener('DOMContentLoaded', function() {
     let debounceTimer = null;
 
     // Setup navigation based on auth state
-    onAuthStateChange((user) => {
+    onAuthStateChange(async (user) => {
         if (user) {
             navLinks.innerHTML = `
                 <a href="collection.html" class="nav-link">My Collection</a>
                 <a href="register.html" class="nav-link">Add Book</a>
-                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="profile.html" class="nav-profile-link" title="Profile">
+                    <div class="nav-avatar" id="nav-avatar">
+                        <img id="nav-avatar-img" src="" alt="Profile" style="display: none;">
+                        <span id="nav-avatar-initial">?</span>
+                    </div>
+                </a>
             `;
+            // Load user profile photo
+            try {
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    const navAvatarImg = document.getElementById('nav-avatar-img');
+                    const navAvatarInitial = document.getElementById('nav-avatar-initial');
+                    if (userData.profilePhoto) {
+                        navAvatarImg.src = userData.profilePhoto;
+                        navAvatarImg.style.display = 'block';
+                        navAvatarInitial.style.display = 'none';
+                    } else if (userData.username) {
+                        navAvatarInitial.textContent = userData.username.charAt(0).toUpperCase();
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading nav avatar:', error);
+            }
         } else {
             navLinks.innerHTML = `
                 <a href="login.html" class="nav-link">Sign In</a>
@@ -175,6 +198,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         searchResults.innerHTML = books.map(book => {
             const safeTitle = escapeAttr(book.title).replace(/'/g, "\\'");
+            // Handle both new genres array and legacy genre string
+            const genres = book.genres || (book.genre ? [book.genre] : []);
+            const genreTags = genres.map(g => `<span class="book-genre-tag">${escapeHtml(g)}</span>`).join('');
+
             return `
                 <div class="book-card">
                     <div class="book-photo">
@@ -186,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="book-info">
                         <h3 class="book-title">${escapeHtml(book.title)}</h3>
                         <p class="book-author">${escapeHtml(book.author)}</p>
-                        ${book.genre ? `<span class="book-genre-tag">${escapeHtml(book.genre)}</span>` : ''}
+                        ${genreTags ? `<div class="book-genres">${genreTags}</div>` : ''}
                         ${book.series ? `<p class="book-series">${escapeHtml(book.series)}</p>` : ''}
                         <p class="book-date">${formatDate(book.dateAcquired)}</p>
                         <p class="book-owner">Added by <span class="owner-name">${escapeHtml(book.ownerUsername || 'Unknown')}</span></p>

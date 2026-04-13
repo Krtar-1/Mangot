@@ -53,6 +53,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     profilePhoto.style.display = 'none';
                 }
 
+                // Update nav avatar
+                const navAvatarImg = document.getElementById('nav-avatar-img');
+                const navAvatarInitial = document.getElementById('nav-avatar-initial');
+                if (navAvatarImg && navAvatarInitial) {
+                    if (userData.profilePhoto) {
+                        navAvatarImg.src = userData.profilePhoto;
+                        navAvatarImg.style.display = 'block';
+                        navAvatarInitial.style.display = 'none';
+                    } else {
+                        navAvatarInitial.textContent = username.charAt(0).toUpperCase();
+                    }
+                }
+
                 // Show bio
                 if (userData.bio) {
                     profileBio.textContent = userData.bio;

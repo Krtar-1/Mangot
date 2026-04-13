@@ -179,6 +179,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     removePhotoBtn.style.display = 'block';
                 }
 
+                // Update nav avatar
+                const navAvatarImg = document.getElementById('nav-avatar-img');
+                const navAvatarInitial = document.getElementById('nav-avatar-initial');
+                if (navAvatarImg && navAvatarInitial) {
+                    if (userData.profilePhoto) {
+                        navAvatarImg.src = userData.profilePhoto;
+                        navAvatarImg.style.display = 'block';
+                        navAvatarInitial.style.display = 'none';
+                    } else {
+                        navAvatarInitial.textContent = currentUsername.charAt(0).toUpperCase();
+                    }
+                }
+
                 // Load bio
                 if (userData.bio) {
                     bioInput.value = userData.bio;
