@@ -1087,7 +1087,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="progress-track">
                             <div class="progress-fill" style="width: ${percentage}%"></div>
                         </div>
-                        <span class="progress-text">${ownedCount}/${totalBooks} owned (${percentage}%)</span>
+                        <span class="progress-text">${ownedCount}/${totalBooks}<span class="progress-owned-label"> owned</span> (${percentage}%)</span>
                     </div>
                 `;
             }

@@ -1053,6 +1053,8 @@ footer {
 .section-count {
     color: #888888;
     font-size: 0.9rem;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .sort-az-btn {
@@ -1065,6 +1067,8 @@ footer {
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .sort-az-btn:hover {
@@ -1099,6 +1103,8 @@ footer {
     text-decoration: none;
     transition: all 0.2s ease;
     margin-left: 0.5rem;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .section-add-btn:hover {
@@ -1683,6 +1689,8 @@ footer {
     padding: 0.25rem 0.6rem;
     border-radius: 12px;
     margin-left: 0.5rem;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* Finished! - Gold (fully owned AND fully read) */
@@ -1758,6 +1766,10 @@ footer {
     font-size: 0.85rem;
     color: #888888;
     white-space: nowrap;
+}
+
+.progress-owned-label {
+    display: inline;
 }
 
 /* Profile Page */
@@ -2147,6 +2159,43 @@ footer {
 
     .collection-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    /* Progress bar tablet/mobile layout */
+    .series-progress-bar {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .series-progress-bar .progress-track {
+        width: 100%;
+        flex: none;
+        height: 8px;
+        order: 2;
+    }
+
+    .series-progress-bar .progress-text {
+        order: 1;
+        text-align: center;
+    }
+
+    .progress-owned-label {
+        display: none;
+    }
+
+    /* Section header tablet/mobile layout */
+    .section-header {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .section-title {
+        flex: 1 1 100%;
+        margin-bottom: 0.25rem;
+    }
+
+    .drag-handle {
+        display: none;
     }
 }
 
