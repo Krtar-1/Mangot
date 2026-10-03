@@ -7,7 +7,8 @@
 function requireAuth() {
     onAuthStateChange((user) => {
         if (!user) {
-            window.location.href = 'login.html';
+            // Guests are view-only - send them back to browsing instead of the login page
+            window.location.href = isGuest() ? 'users.html' : 'login.html';
         }
     });
 }

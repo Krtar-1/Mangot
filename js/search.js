@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     onAuthStateChange(async (user) => {
         if (user) {
             navLinks.innerHTML = `
+                <a href="users.html" class="nav-link">Collectors</a>
                 <a href="collection.html" class="nav-link">My Collection</a>
                 <a href="register.html" class="nav-link">Add Book</a>
                 <a href="profile.html" class="nav-profile-link" title="Profile">
@@ -45,9 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error loading nav avatar:', error);
             }
         } else {
-            navLinks.innerHTML = `
-                <a href="login.html" class="nav-link">Sign In</a>
-            `;
+            navLinks.innerHTML = signedOutNavHtml('search.html');
         }
     });
 

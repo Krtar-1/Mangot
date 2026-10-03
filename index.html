@@ -50,6 +50,7 @@
                     // User is signed in
                     navLinks.innerHTML = `
                         <a href="search.html" class="nav-link">Search</a>
+                        <a href="users.html" class="nav-link">Collectors</a>
                         <a href="collection.html" class="nav-link">My Collection</a>
                         <a href="profile.html" class="nav-link">Profile</a>
                     `;
@@ -57,12 +58,14 @@
                     ctaBtn.textContent = 'Go to Collection';
                 } else {
                     // User is signed out
-                    navLinks.innerHTML = `
-                        <a href="search.html" class="nav-link">Search</a>
-                        <a href="login.html" class="nav-link">Sign In</a>
-                    `;
-                    ctaBtn.href = 'login.html';
-                    ctaBtn.textContent = 'Get Started';
+                    navLinks.innerHTML = signedOutNavHtml('index.html');
+                    if (isGuest()) {
+                        ctaBtn.href = 'users.html';
+                        ctaBtn.textContent = 'Browse Collections';
+                    } else {
+                        ctaBtn.href = 'login.html';
+                        ctaBtn.textContent = 'Get Started';
+                    }
                 }
             });
         });

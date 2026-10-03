@@ -702,6 +702,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Re-render to apply new sort settings
         if (allBooksCache.length > 0) {
             renderGroupedBooks(allBooksCache);
+            syncSeriesTotals(allBooksCache);
         }
     };
 
@@ -944,9 +945,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 allBooksCache = books; // Cache for edit modal
                 renderGroupedBooks(books);
+                syncSeriesTotals(books);
             }, (error) => {
                 console.error('Error loading books:', error);
             });
+    }
+
+    /**
+     * Copy each series' total (when finished) and naming template onto its
+     * books as `seriesTotal` / `seriesNamingTemplate`. User docs are private,
+     * but books are public, so this is how the Collectors page can show
+     * "30/34 books" and "next to get" titles for other users' series.
+     */
+    async function syncSeriesTotals(books) {
+        if (!currentUserId) return;
+
+        const updates = [];
+        books.forEach(book => {
+            const settings = (book.series && seriesSettings[book.series]) || {};
+            const expected = {
+                seriesTotal: settings.status === 'finished' && settings.totalBooks ? settings.totalBooks : null,
+                seriesNamingTemplate: settings.namingTemplate || null
+            };
+            if ((book.seriesTotal ?? null) !== expected.seriesTotal ||
+                (book.seriesNamingTemplate ?? null) !== expected.seriesNamingTemplate) {
+                updates.push({ id: book.id, data: expected });
+            }
+        });
+
+        try {
+            // Firestore batches are limited to 500 writes
+            for (let i = 0; i < updates.length; i += 500) {
+                const batch = db.batch();
+                updates.slice(i, i + 500).forEach(({ id, data }) => {
+                    const ref = db.collection('users').doc(currentUserId).collection('books').doc(id);
+                    batch.update(ref, data);
+                });
+                await batch.commit();
+            }
+        } catch (error) {
+            console.error('Error syncing series totals:', error);
+        }
     }
 
     /**

@@ -105,10 +105,20 @@ function openCommentsModal(bookId, ownerId, bookTitle) {
 
     // Check if user is logged in
     const user = getCurrentUser();
+    let signInHint = document.getElementById('comments-signin-hint');
+    if (!signInHint) {
+        signInHint = document.createElement('p');
+        signInHint.id = 'comments-signin-hint';
+        signInHint.className = 'guest-hint';
+        signInHint.innerHTML = '<a href="login.html">Sign in</a> to join the conversation';
+        commentForm.after(signInHint);
+    }
     if (user) {
         commentForm.style.display = 'block';
+        signInHint.style.display = 'none';
     } else {
         commentForm.style.display = 'none';
+        signInHint.style.display = 'block';
     }
 
     // Show modal

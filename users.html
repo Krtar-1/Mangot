@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collectors - Mangot</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Mangot</a>
+            <div class="nav-links" id="nav-links">
+                <!-- Dynamic nav links will be inserted here -->
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="search-container users-container">
+            <div class="search-header">
+                <h1>Collectors</h1>
+                <p class="search-description">Find other users and browse their collections</p>
+            </div>
+
+            <div class="search-controls">
+                <div class="search-input-wrapper">
+                    <input type="text" id="user-search-input" placeholder="Search users by name..." autocomplete="off">
+                    <button id="clear-user-search" class="clear-btn" title="Clear search">&times;</button>
+                </div>
+            </div>
+
+            <div id="user-list" class="user-list">
+                <!-- User chips will be rendered here -->
+            </div>
+
+            <div id="loading-state" class="loading-state">
+                <p>Loading collectors...</p>
+            </div>
+
+            <div id="viewed-user" class="viewed-user" style="display: none;">
+                <div class="viewed-user-header">
+                    <div class="viewed-user-avatar" id="viewed-user-avatar">
+                        <img id="viewed-user-photo" src="" alt="" style="display: none;">
+                        <span id="viewed-user-initial">?</span>
+                    </div>
+                    <div class="viewed-user-details">
+                        <h2 id="viewed-user-name"></h2>
+                        <p id="viewed-user-bio" class="viewed-user-bio" style="display: none;"></p>
+                    </div>
+                </div>
+
+                <div class="collection-stats viewed-user-stats">
+                    <span id="viewed-book-count" class="book-count">0 books</span>
+                    <span class="stats-divider">|</span>
+                    <span id="viewed-series-count" class="series-count">0 series</span>
+                    <span class="stats-divider">|</span>
+                    <span id="viewed-read-count" class="series-count">0 read</span>
+                </div>
+
+                <div id="next-to-get" class="next-to-get" style="display: none;">
+                    <div class="next-to-get-header">
+                        <h3>Next to Get</h3>
+                        <button id="next-to-get-shuffle" class="sort-series-btn" title="Pick 5 different books">Shuffle</button>
+                    </div>
+                    <ul id="next-to-get-list" class="next-to-get-list"></ul>
+                </div>
+
+                <div class="collection-search">
+                    <input type="text" id="viewed-collection-search" placeholder="Search this collection..." autocomplete="off">
+                    <span id="viewed-results-count" class="search-results-count"></span>
+                </div>
+
+                <div id="viewed-collection" class="collections-container">
+                    <!-- Series sections will be rendered here -->
+                </div>
+            </div>
+
+            <div id="no-users" class="empty-state">
+                <p>No collectors found</p>
+                <span class="empty-hint">Try a different name</span>
+            </div>
+        </section>
+    </main>
+
+    <!-- Comments Modal -->
+    <div id="comments-modal" class="modal">
+        <div class="modal-content comments-modal-content">
+            <div class="modal-header">
+                <h2>Comments</h2>
+                <button class="modal-close" id="comments-close">&times;</button>
+            </div>
+            <p class="comments-book-title" id="comments-book-title"></p>
+
+            <div id="comments-list" class="comments-list">
+                <!-- Comments will be rendered here -->
+            </div>
+
+            <form id="comment-form" class="comment-form">
+                <textarea id="comment-text" placeholder="Write a comment..." required maxlength="500"></textarea>
+                <div class="comment-form-footer">
+                    <label class="spoiler-label">
+                        <input type="checkbox" id="spoiler-toggle">
+                        <span class="spoiler-checkbox"></span>
+                        Mark as spoiler
+                    </label>
+                    <button type="submit" class="cta submit-btn" id="submit-comment">Post Comment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Mangot</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/comments.js"></script>
+    <script src="js/users.js"></script>
+</body>
+</html>
